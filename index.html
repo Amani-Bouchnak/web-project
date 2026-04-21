@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tunisian Bac Average Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f0e8;
+      --card: #fffdf7;
+      --accent: #c0392b;
+      --accent2: #e67e22;
+      --text: #1a1a1a;
+      --muted: #6b6b6b;
+      --border: #d4c9b0;
+      --input-bg: #faf7f0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 0.6rem;
+      max-width: 560px;
+      margin-inline: auto;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+
+    .section-select-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    label.main-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+    }
+
+    select#sectionSelect {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--input-bg);
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--text);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236b6b6b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+    }
+
+    select#sectionSelect:focus { outline: 2px solid var(--accent); border-color: transparent; }
+
+    .section-block { display: none; }
+    .section-block.active { display: block; }
+
+    .section-block h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .field-row:last-child { border-bottom: none; }
+
+    .field-row label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .field-row .badge {
+      font-size: 0.7rem;
+      background: #f0ebe0;
+      color: var(--muted);
+      border-radius: 20px;
+      padding: 1px 7px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .field-row input[type="number"] {
+      width: 90px;
+      padding: 0.45rem 0.6rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--input-bg);
+      font-family: inherit;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .field-row input[type="number"]:focus {
+      outline: 2px solid var(--accent);
+      border-color: transparent;
+    }
+
+    .optional-label {
+      color: var(--accent2);
+      font-style: italic;
+      font-size: 0.82rem;
+    }
+
+    .btn-row {
+      margin-top: 1.8rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      flex: 1;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    button:active { transform: scale(0.97); }
+
+    #calcBtn {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(192,57,43,0.25);
+    }
+
+    #calcBtn:hover { box-shadow: 0 6px 20px rgba(192,57,43,0.35); }
+
+    #resetBtn {
+      background: #eee;
+      color: var(--muted);
+    }
+
+    #result {
+      display: none;
+      margin-top: 1.5rem;
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    #result .avg-label {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 0.4rem;
+    }
+
+    #result .avg-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #fff;
+      line-height: 1;
+    }
+
+    #result .mention {
+      margin-top: 0.6rem;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    #result .advice {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #bbb;
+      line-height: 1.6;
+    }
+
+    .mention.fail    { background: #c0392b22; color: #e74c3c; }
+    .mention.pass    { background: #27ae6022; color: #2ecc71; }
+    .mention.ab      { background: #f39c1222; color: #f39c12; }
+    .mention.bien    { background: #2980b922; color: #3498db; }
+    .mention.tresb   { background: #8e44ad22; color: #9b59b6; }
+
+    footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Calculate your Average</h1>
+  <p>A simple Bac calculator by <strong>Amani Bouchnak</strong> to help Tunisian Baccalaureate students calculate their average and receive personalized advice.</p>
+</header>
+
+<div class="card">
+
+  <div class="section-select-wrap">
+    <label class="main-label" for="sectionSelect">Bac Section</label>
+    <select id="sectionSelect" onchange="showDiv(this.value)">
+      <option value="Mathematics">Mathematics</option>
+      <option value="ExperimentalSciences">Experimental Sciences</option>
+      <option value="TechnicalSciences">Technical Sciences</option>
+      <option value="ComputerSciences">Computer Sciences</option>
+      <option value="EconomicsManagement">Economics and Management</option>
+      <option value="Literature">Literature</option>
+      <option value="Sports">Sports</option>
+    </select>
+  </div>
+
+  <!-- ═══════════════ BAC MATHEMATICS ═══════════════ -->
+  <div id="Mathematics" class="section-block active">
+    <h2>Mathematics</h2>
+    <div class="field-row"><label for="math_maths">Mathematics</label><input type="number" id="math_maths" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_physics">Physics & Chemistry</label><input type="number" id="math_physics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_svt">Life & Earth Sciences (SVT)</label><input type="number" id="math_svt" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_arabic">Arabic</label><input type="number" id="math_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_french">French</label><input type="number" id="math_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_english">English</label><input type="number" id="math_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_philosophy">Philosophy</label><input type="number" id="math_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_informatics">Informatics</label><input type="number" id="math_informatics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="math_sport">Physical Education (Sport) <span class="optional-label">(optional)</span></label><input type="number" id="math_sport" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="math_option">Option</label><input type="number" id="math_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <!-- ═══════════════ BAC EXPERIMENTAL SCIENCES ═══════════════ -->
+  <div id="ExperimentalSciences" class="section-block">
+    <h2>Experimental Sciences</h2>
+    <div class="field-row"><label for="sc_maths">Mathematics</label><input type="number" id="sc_maths" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_physics">Physics & Chemistry</label><input type="number" id="sc_physics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_svt">Life & Earth Sciences (SVT)</label><input type="number" id="sc_svt" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_arabic">Arabic</label><input type="number" id="sc_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_french">French</label><input type="number" id="sc_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_english">English</label><input type="number" id="sc_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_philosophy">Philosophy</label><input type="number" id="sc_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_informatics">Informatics</label><input type="number" id="sc_informatics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="sc_sport">Physical Education (Sport) <span class="optional-label">(optional)</span></label><input type="number" id="sc_sport" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sc_option">Option</label><input type="number" id="sc_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <!-- ═══════════════ BAC TECHNICAL SCIENCES ═══════════════ -->
+  <div id="TechnicalSciences" class="section-block">
+    <h2>Technical Sciences</h2>
+    <div class="field-row"><label for="tech_maths">Mathematics</label><input type="number" id="tech_maths" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_physics">Physics & Chemistry</label><input type="number" id="tech_physics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_electricity">Electrical Sciences</label><input type="number" id="tech_electricity" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_mechanics">Mechanical Sciences</label><input type="number" id="tech_mechanics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_arabic">Arabic</label><input type="number" id="tech_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_french">French</label><input type="number" id="tech_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_english">English</label><input type="number" id="tech_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_philosophy">Philosophy</label><input type="number" id="tech_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_informatics">Informatics</label><input type="number" id="tech_informatics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="tech_sport">Physical Education (Sport) <span class="optional-label">(optional)</span></label><input type="number" id="tech_sport" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="tech_option">Option</label><input type="number" id="tech_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <!-- ═══════════════ BAC COMPUTER SCIENCES ═══════════════ -->
+  <div id="ComputerSciences" class="section-block">
+    <h2>Computer Sciences</h2>
+    <div class="field-row"><label for="info_maths">Mathematics</label><input type="number" id="info_maths" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="info_prog">Programming</label><input type="number" id="info_prog" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="info_sti">Information Systems Technology (STI)</label><input type="number" id="info_sti" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="info_physics">Physics & Chemistry</label><input type="number" id="info_physics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="info_arabic">Arabic</label><input type="number" id="info_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="info_french">French</label><input type="number" id="info_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="info_english">English</label><input type="number" id="info_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="info_philosophy">Philosophy</label><input type="number" id="info_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="info_sport">Physical Education (Sport) <span class="optional-label">(optional)</span></label><input type="number" id="info_sport" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="info_option">Option</label><input type="number" id="info_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <!-- ═══════════════ BAC ECONOMICS AND MANAGEMENT ═══════════════ -->
+  <div id="EconomicsManagement" class="section-block">
+    <h2>Economics and Management</h2>
+    <div class="field-row"><label for="eco_eco">Economics</label><input type="number" id="eco_eco" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_mgmt">Management</label><input type="number" id="eco_mgmt" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_maths">Mathematics</label><input type="number" id="eco_maths" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_arabic">Arabic</label><input type="number" id="eco_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_his_geo">History & Geography</label><input type="number" id="eco_his_geo" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_french">French</label><input type="number" id="eco_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_english">English</label><input type="number" id="eco_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_philosophy">Philosophy</label><input type="number" id="eco_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_informatics">Informatics</label><input type="number" id="eco_informatics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="eco_sport">Physical Education (Sport) <span class="optional-label">(optional)</span></label><input type="number" id="eco_sport" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="eco_option">Option</label><input type="number" id="eco_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <!-- ═══════════════ BAC LITERATURE ═══════════════ -->
+  <div id="Literature" class="section-block">
+    <h2>Literature</h2>
+    <div class="field-row"><label for="lit_arabic">Arabic</label><input type="number" id="lit_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="lit_french">French</label><input type="number" id="lit_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="lit_english">English</label><input type="number" id="lit_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ CHANGED: History + Geography → combined History & Geography -->
+    <div class="field-row"><label for="lit_his_geo">History & Geography</label><input type="number" id="lit_his_geo" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="lit_philosophy">Philosophy</label><input type="number" id="lit_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="lit_islamic">Islamic Thought (Pensée Islamique)</label><input type="number" id="lit_islamic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="lit_informatics">Informatics</label><input type="number" id="lit_informatics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="lit_sport">Physical Education (Sport) <span class="optional-label">(optional)</span></label><input type="number" id="lit_sport" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="lit_option">Option</label><input type="number" id="lit_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <!-- ═══════════════ BAC SPORTS ═══════════════ -->
+  <div id="Sports" class="section-block">
+    <h2>Sports</h2>
+    <!-- ✚ RENAMED & RESTRUCTURED -->
+    <div class="field-row"><label for="sp_practice">Practical Sports (Sport Pratique)</label><input type="number" id="sp_practice" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sp_theory">Sports Theory (Théorie du Sport)</label><input type="number" id="sp_theory" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="sp_bio">Biological Sciences (Sciences Biologiques)</label><input type="number" id="sp_bio" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sp_performance">Physical Education (Education Physique)</label><input type="number" id="sp_performance" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="sp_physics">Physics & Chemistry</label><input type="number" id="sp_physics" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="sp_maths">Mathematics</label><input type="number" id="sp_maths" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sp_arabic">Arabic</label><input type="number" id="sp_arabic" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sp_french">French</label><input type="number" id="sp_french" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sp_english">English</label><input type="number" id="sp_english" min="0" max="20" step="0.01" placeholder="—"></div>
+    <div class="field-row"><label for="sp_philosophy">Philosophy</label><input type="number" id="sp_philosophy" min="0" max="20" step="0.01" placeholder="—"></div>
+    <!-- ✚ ADDED -->
+    <div class="field-row"><label for="sp_option">Option</label><input type="number" id="sp_option" min="0" max="20" step="0.01" placeholder="—"></div>
+  </div>
+
+  <div class="btn-row">
+    <button id="calcBtn" onclick="calculateAverage()">Calculate Average</button>
+    <button id="resetBtn" onclick="resetForm()">Reset</button>
+  </div>
+
+  <div id="result">
+    <div class="avg-label">Your Average</div>
+    <div class="avg-value" id="avgValue">—</div>
+    <div class="mention" id="mentionBadge"></div>
+    <div class="advice" id="adviceText"></div>
+  </div>
+
+</div>
+
+<footer>Made with ❤️ by Amani Bouchnak &mdash; For Tunisian Bac Students</footer>
+
+<script>
+  function showDiv(value) {
+    document.querySelectorAll('.section-block').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById(value);
+    if (target) target.classList.add('active');
+    document.getElementById('result').style.display = 'none';
+  }
+
+  function calculateAverage() {
+    const active = document.querySelector('.section-block.active');
+    if (!active) return;
+
+    const inputs = active.querySelectorAll('input[type="number"]');
+    let sum = 0, count = 0;
+
+    inputs.forEach(inp => {
+      const val = parseFloat(inp.value);
+      if (!isNaN(val) && inp.value.trim() !== '') {
+        if (val < 0 || val > 20) {
+          alert(`Invalid grade: ${val}. Grades must be between 0 and 20.`);
+          return;
+        }
+        sum += val;
+        count++;
+      }
+    });
+
+    if (count === 0) {
+      alert('Please enter at least one grade.');
+      return;
+    }
+
+    const avg = sum / count;
+    const avgRounded = Math.round(avg * 100) / 100;
+
+    const resultEl    = document.getElementById('result');
+    const avgValueEl  = document.getElementById('avgValue');
+    const mentionEl   = document.getElementById('mentionBadge');
+    const adviceEl    = document.getElementById('adviceText');
+
+    avgValueEl.textContent = avgRounded.toFixed(2) + ' / 20';
+
+    const section = document.getElementById('sectionSelect').value;
+
+    // Realistic advice based on actual Tunisian orientation thresholds
+    const adviceMap = {
+
+      // ─── FAILED < 10 ──────────────────────────────────────────────────────
+      fail: {
+        Mathematics:
+          "La session de rattrapage est ta vraie deuxième chance — concentre-toi sur les Maths et la Physique-Chimie qui sont tes matières les plus lourdes en coefficient. Refais les annales des 3 dernières années en conditions d'examen. Un travail ciblé de 2 semaines peut facilement te faire gagner 2 points.",
+        ExperimentalSciences:
+          "Priorité absolue à la Physique-Chimie et aux SVT pour la session de contrôle. Relis tes fiches de cours et corrige toutes tes anciennes épreuves. L'Arabe pèse plus que tu ne le penses dans la moyenne — ne le néglige pas.",
+        TechnicalSciences:
+          "Les Sciences Electriques et la Mécanique sont tes deux leviers principaux. Reprends les corrections de TPs — les exercices pratiques sont souvent plus représentatifs de l'examen que le cours théorique. Les annales sont ton meilleur outil pour la session de contrôle.",
+        ComputerSciences:
+          "Revois les bases : tracé de programmes, algorithmes et tri sont les plus testés. Pour le STI, fais des fiches synthétiques — c'est une matière qu'on peut améliorer vite avec de la mémorisation structurée. 2 semaines sérieuses peuvent tout changer.",
+        EconomicsManagement:
+          "Economie et Gestion représentent le plus gros de ta moyenne. Travaille la rédaction structurée des dissertations économiques et des études de cas en Gestion — la forme compte autant que le fond. Relis tes copies corrigées pour identifier tes erreurs récurrentes.",
+        Literature:
+          "L'Arabe est ta matière la plus décisive. Travaille la structure de la dissertation : introduction, 3 axes argumentés, conclusion. Pour la Philosophie, 3-4 références de philosophes bien placées dans une copie bien rédigée font la différence. Un bon plan peut te faire gagner 3-4 points.",
+        Sports:
+          "Les Sciences Biologiques et la Théorie du Sport sont les épreuves écrites les plus améliorables rapidement. Révise l'anatomie et la physiologie par fiches. Pour les épreuves pratiques, montre de l'engagement et de la régularité — les évaluateurs le valorisent."
+      },
+
+      // ─── PASSABLE 10–12 ────────────────────────────────────────────────────
+      pass: {
+        Mathematics:
+          "Avec un Passable en Bac Math, tu peux accéder à : la Faculté des Sciences de Tunis (FST) ou de Sfax (FSS) pour une Licence en Maths, Physique ou Informatique, les ISET (Institut Supérieur des Etudes Technologiques) dans plusieurs gouvernorats. Les Classes Préparatoires (IPEIT, IPEIM, etc.) ne sont pas accessibles à ce niveau. Une Licence solide en Maths ou Physique reste une bonne base pour construire ta carrière.",
+        ExperimentalSciences:
+          "Avec un Passable en Sciences Exp., tu peux accéder à : les Facultés des Sciences (biologie, chimie, géologie), les ISET, des programmes paramédicaux comme les Sciences Infirmières (ISSS) ou la Kinésithérapie. La Médecine et la Pharmacie ne sont pas réalistes à ce score — les concours d'entrée sont très sélectifs.",
+        TechnicalSciences:
+          "Avec un Passable en Bac Tech, les ISET (génie électrique, génie mécanique, génie civil) sont ton orientation la plus réaliste. Ce sont des cursus de 3 ans qui débouchent directement sur le marché du travail ou sur une Licence Professionnelle. C'est un choix solide et concret.",
+        ComputerSciences:
+          "Avec un Passable en Bac Info, tu peux accéder à : l'ISI (Institut Supérieur d'Informatique), les ISET avec filières informatiques, et certaines écoles privées. Une Licence en Informatique dans une faculté publique (FST, FSS) est accessible et constitue une bonne base pour la suite.",
+        EconomicsManagement:
+          "Avec un Passable en Eco & Gestion, tu peux accéder aux FSEG (Faculté des Sciences Economiques et de Gestion) de Tunis, Sfax ou Sousse — programmes en économie, comptabilité et gestion. L'IHEC Carthage n'est pas accessible à ce score, mais un diplôme FSEG reste une porte d'entrée sérieuse dans le monde professionnel.",
+        Literature:
+          "Avec un Passable en Bac Lettres, tu peux accéder à la FLSHS (Faculté des Lettres, des Arts et des Humanités), aux Facultés de Droit, ou aux programmes de géographie et histoire. Ces filières mènent vers l'enseignement, le droit, ou la fonction publique après concours.",
+        Sports:
+          "Avec un Passable en Bac Sport, tu peux accéder à l'ISSEP (Institut Supérieur du Sport et de l'Education Physique) — campus de Ksar Saïd, Sfax ou Gafsa. C'est la filière naturelle du Bac Sport, et elle mène aux diplômes d'entraîneur et à l'enseignement de l'EPS."
+      },
+
+      // ─── ASSEZ BIEN 12–14 ──────────────────────────────────────────────────
+      ab: {
+        Mathematics:
+          "Avec Assez Bien en Bac Math, tu peux viser : les meilleurs campus ISET, la FST / FSS pour une Licence solide, l'ISSAT Sousse (sciences appliquées), et des écoles privées comme ESPRIT ou Polytechnique Sousse. Les Classes Préparatoires (IPEIT, IPEIM, IPEIN, IPEIS) sont accessibles à partir de ce niveau selon les places disponibles et ton classement — renseigne-toi sur les seuils de ta région.",
+        ExperimentalSciences:
+          "Avec Assez Bien en Sciences Exp., tu peux accéder aux Facultés des Sciences (biologie, chimie), aux programmes paramédicaux (ISSS), et à la Pharmacie certaines années selon les quotas régionaux. La Médecine est très compétitive à ce score — le concours d'entrée (concours de résidanat après 1ère année) demande généralement des moyennes au-dessus de 15. Une Licence en biologie ou chimie reste une bonne voie vers l'enseignement ou la recherche.",
+        TechnicalSciences:
+          "Avec Assez Bien en Bac Tech, tu peux viser : les meilleurs ISET, l'ISSAT Sousse, des écoles privées (Polytechnique Sousse, ESPRIT). Certains instituts préparatoires régionaux (IPEIM, IPEIN, IPEIS) admettent des bacheliers Tech à ce niveau selon les places — vérifie les seuils de l'année en cours. Tu peux aussi viser une Licence Pro en génie électrique ou mécanique.",
+        ComputerSciences:
+          "Avec Assez Bien en Bac Info, tu peux accéder à : l'ISI Tunis, l'ISIMS Monastir, la FST / FSS (Licence Informatique), et des écoles privées comme ESPRIT ou Horizon. Ce sont des programmes sérieux. Après ta Licence, des Masters spécialisés en cybersécurité, IA ou développement logiciel sont accessibles.",
+        EconomicsManagement:
+          "Avec Assez Bien en Eco & Gestion, tu peux viser : l'ISG Tunis, l'ISG Sousse, l'ISCAE, les FSEG (programmes avancés). L'IHEC Carthage commence à être accessible à partir de 14 — tu es juste en dessous. Un diplôme ISG ou FSEG en finance, audit ou management est une voie sérieuse et reconnue.",
+        Literature:
+          "Avec Assez Bien en Bac Lettres, tu peux tenter l'IPSI (Institut de Presse et des Sciences de l'Information — sélectif, mais à ta portée), les Facultés de Droit, et les Masters de la FLSHS (littérature, philosophie, histoire). L'enseignement secondaire par concours CAPES devient un objectif réaliste après ta Licence.",
+        Sports:
+          "Avec Assez Bien en Bac Sport, tu es un bon candidat pour l'ISSEP (tous les campus). Tu peux poursuivre une Licence en Sciences du Sport, te spécialiser dans une discipline, et viser un diplôme national d'entraîneur. L'enseignement de l'EPS dans le secondaire est un débouché concret."
+      },
+
+      // ─── BIEN 14–16 ────────────────────────────────────────────────────────
+      bien: {
+        Mathematics:
+          "Avec Bien en Bac Math, tu es compétitif pour les Classes Préparatoires : IPEIT (Tunis), IPEIM (Monastir), IPEIN (Nabeul), IPEIS (Sfax), IPEIG (Gabès). Après 2 ans de Prépa, tu passes le concours national pour intégrer les Ecoles Nationales d'Ingénieurs (ENIT, ENIM, ENIS, ENIG, ENIB, ENISO), Sup'Com ou l'ENSI. Des écoles privées comme ESPRIT ou XIE sont également accessibles directement.",
+        ExperimentalSciences:
+          "Avec Bien en Sciences Exp., tu es compétitif pour : les Classes Prépa à l'IPEIT (filière PC), l'accès à la Pharmacie et à la Médecine Dentaire est réaliste selon les quotas. La Médecine (Faculté de Médecine) est très sélective — les admis ont généralement des moyennes autour de 15-16. La Pharmacie est plus accessible dans cette fourchette. Cible aussi les meilleures Licences en biologie ou chimie à la FST.",
+        TechnicalSciences:
+          "Avec Bien en Bac Tech, tu es compétitif pour les Classes Préparatoires : IPEIM (Monastir), IPEIN (Nabeul), IPEIS (Sfax), filières PT ou PSI. Après 2 ans de Prépa, tu peux intégrer ENIT, ENIM, ENIS ou d'autres ENI par concours national. Des écoles privées d'ingénieurs sont également accessibles directement.",
+        ComputerSciences:
+          "Avec Bien en Bac Info, tu peux viser : l'IPEIT (filière Info/Prépa), l'ISI Tunis (top programmes), l'ISIMS, la FST. Après une bonne Licence, l'ENSI (Ecole Nationale des Sciences de l'Informatique) est accessible via concours. Des écoles privées comme ESPRIT sont bien dans tes cordes.",
+        EconomicsManagement:
+          "Avec Bien en Eco & Gestion, tu es compétitif pour l'IHEC Carthage (les seuils tournent autour de 14-15 selon les années), l'ISG Tunis, l'ISCAE, et les FSEG top programmes. C'est un score solide pour viser une carrière en finance, audit, consulting ou commerce international.",
+        Literature:
+          "Avec Bien en Bac Lettres, tu es compétitif pour l'IPSI (l'un des programmes les plus sélectifs en Lettres), les meilleures Facultés de Droit (Tunis, Sfax), et les Masters de la FLSHS. Le concours CAPES pour l'enseignement secondaire est pleinement accessible. Une carrière dans les médias, le droit ou la diplomatie est réaliste.",
+        Sports:
+          "Avec Bien en Bac Sport, tu es un candidat solide pour les meilleurs programmes de l'ISSEP (Ksar Saïd). Tu peux viser une Licence puis un Master en Sciences du Sport ou en Management Sportif, et préparer les concours de recrutement comme enseignant d'EPS dans le public."
+      },
+
+      // ─── TRÈS BIEN ≥ 16 ────────────────────────────────────────────────────
+      tresb: {
+        Mathematics:
+          "Avec Très Bien en Bac Math, tu es parmi les meilleurs bacheliers du pays. L'IPEST (La Marsa) est le programme le plus sélectif — en 2024, la moyenne minimale officielle pour candidater est 16/20, mais les étudiants réellement admis ont en général des moyennes de 17+ en Maths et en Physique. Autrement dit, avec 16 tu peux candidater, mais la sélection reste très serrée (120 places seulement). L'IPEIT (Tunis) est un objectif très réaliste et sérieux. Après 2 ans de Prépa, les meilleures ENI (ENIT, ENIM, ENIS), l'EPT (Ecole Polytechnique de Tunisie), Sup'Com et l'ENSI sont accessibles via concours. Des bourses pour des Classes Prépas en France existent également — renseigne-toi auprès du Ministère de l'Enseignement Supérieur.",
+        ExperimentalSciences:
+          "Avec Très Bien en Sciences Exp., tu es parmi les meilleurs bacheliers. La Médecine (Faculté de Médecine de Tunis, Sfax, Sousse, Monastir) devient réaliste à ce niveau — les concours d'entrée en 1ère année sont très compétitifs, mais ton score te place dans les profils recherchés. La Pharmacie et la Médecine Dentaire sont également accessibles. Pour les filières scientifiques d'excellence, l'IPEIT (filière PC) est une option sérieuse après laquelle tu peux intégrer les meilleures ENI ou l'EPT.",
+        TechnicalSciences:
+          "Avec Très Bien en Bac Tech, tu es au sommet de ta section. L'IPEIT (filière PSI/PT) et les autres instituts préparatoires (IPEIM, IPEIN, IPEIS) sont pleinement dans tes cordes. Après la Prépa, ENIT, ENIM et les meilleures écoles d'ingénieurs nationales sont accessibles via concours. Des écoles privées d'ingénieurs de qualité (ESPRIT, XIE) te recruteront avec les meilleures conditions.",
+        ComputerSciences:
+          "Avec Très Bien en Bac Info, tu es au top de ta section. L'IPEIT (filière Informatique/Prépa) est un objectif réaliste et valorisant. Après la Prépa ou une solide Licence à l'ISI ou à la FST, l'ENSI (concours national) est à ta portée. Des bourses d'excellence pour des programmes à l'étranger (France, Allemagne, Canada) sont aussi envisageables — renseigne-toi sur la session des lauréats du Ministère.",
+        EconomicsManagement:
+          "Avec Très Bien en Eco & Gestion, tu es parmi les meilleurs de ta section. L'IHEC Carthage (l'école de commerce la plus sélective du pays) est ton objectif principal. L'ISG Tunis, l'ISCAE, et des programmes à l'international (bourses d'excellence dans des universités françaises ou canadiennes) sont également envisageables. Une carrière en finance, consulting ou management international est un objectif réaliste.",
+        Literature:
+          "Avec Très Bien en Bac Lettres, tu es parmi les meilleurs de ta section. L'IPSI (très sélectif, formation en journalisme et communication) est une cible sérieuse. Les meilleures Facultés de Droit, les Masters de la FLSHS et les concours de la fonction publique (enseignement, corps diplomatique) sont pleinement accessibles. Des bourses d'excellence pour des universités françaises en humanités (Sorbonne, Lyon 2) existent pour les bacheliers Lettres avec 14+.",
+        Sports:
+          "Avec Très Bien en Bac Sport, tu es parmi les meilleurs bacheliers de ta section au niveau national. L'ISSEP (Ksar Saïd) — le campus principal — est ton premier choix. Tu peux poursuivre jusqu'au Master en Sciences du Sport ou en Management Sportif, préparer les concours d'inspecteur d'EPS, ou viser un diplôme d'entraîneur national de haut niveau."
+      }
+    };
+
+    let mention, cls, advice;
+    if (avg < 10) {
+      mention = '✗ Failed (Ajourné)'; cls = 'fail';
+      advice = adviceMap.fail[section] || "Don't give up! Focus on your high-coefficient subjects and consider the rattrapage session.";
+    } else if (avg < 12) {
+      mention = '✓ Passable'; cls = 'pass';
+      advice = adviceMap.pass[section] || "You passed! Explore university orientation options available with your score.";
+    } else if (avg < 14) {
+      mention = '★ Assez Bien'; cls = 'ab';
+      advice = adviceMap.ab[section] || "Good job! You have access to a wide range of higher education programs.";
+    } else if (avg < 16) {
+      mention = '★★ Bien'; cls = 'bien';
+      advice = adviceMap.bien[section] || "Very well done! You qualify for competitive programs.";
+    } else {
+      mention = '★★★ Très Bien'; cls = 'tresb';
+      advice = adviceMap.tresb[section] || "Exceptional! You are among the top students in Tunisia.";
+    }
+
+    mentionEl.textContent = mention;
+    mentionEl.className   = 'mention ' + cls;
+    adviceEl.textContent  = advice;
+    resultEl.style.display = 'block';
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetForm() {
+    document.querySelectorAll('input[type="number"]').forEach(inp => inp.value = '');
+    document.getElementById('result').style.display = 'none';
+  }
+
+  // Show first section on load
+  showDiv('Mathematics');
+</script>
+</body>
+</html>

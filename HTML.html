@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Average Calculator</title>
+        <link rel="stylesheet" href="CSS.css">
+        <script src="JAVASCRIPT.js"></script>
+    </head>
+    <body>
+        <h1>Calculate your Avrage</h1>
+        <div>
+            <div>
+                <p>This is a simple average calculator created by Amani Bouchnak to help Tunisian Baccalaureate students calculate their average and receive useful personalized advice.</p>
+            </div>
+            <div>
+                <label for="sectionSelect">Bac Section</label>
+                    <select id="sectionSelect" onchange="showDiv(this.value)">
+                    <option value="Mathematics">Matematics</option>
+                    <option value="Experimental Scienses">Experimental Scienses</option>
+                    <option value="Technical Sciences">Technical Sciences</option>
+                    <option value="Computer Sciences">Computer Sciences</option>
+                    <option value="Economics and Management">Economics and Management</option>
+                    <option value="Literature">Literature</option>
+                    <option value="Sports">Sports</option>
+                    </select>
+            </div>
+            <div id="Matematics" class="hidden">
+                <div><label for="math_maths">Maths</label><input type="number" id="math_maths" min="0" max="20" step="0.01"></div>
+                <div><label for="math_physics">Physics</label><input type="number" id="math_physics" min="0" max="20" step="0.01"></div>
+                <div><label for="math_svt">SVT</label><input type="number" id="math_svt" min="0" max="20" step="0.01"></div>
+                <div><label for="math_arabic">Arabic</label><input type="number" id="math_arabic" min="0" max="20" step="0.01"></div>
+                <div><label for="math_french">French</label><input type="number" id="math_french" min="0" max="20" step="0.01"></div>
+                <div><label for="math_english">English</label><input type="number" id="math_english" min="0" max="20" step="0.01"></div>
+                <div><label for="math_philosophy">Philosophy</label><input type="number" id="math_philosophy" min="0" max="20" step="0.01"></div>
+                <div><label for="math_informatics">Informatics</label><input type="number" id="math_informatics" min="0" max="20" step="0.01"></div>
+                <div><label for="math_option">Option</label><input type="number" id="math_option" min="0" max="20" step="0.01"></div>
+            </div>
+            <div id="Experimental Scienses" class="hidden">
+                <div>
+                    <label for="sc_maths">Maths</label>
+                    <input type="number" id="sc_maths" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sc_physics">Physics</label>
+                    <input type="number" id="sc_physics" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sc_svt">SVT</label>
+                    <input type="number" id="sc_svt" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sc_arabic">Arabic</label>
+                    <input type="number" id="sc_arabic" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sc_french">French</label>
+                    <input type="number" id="sc_french" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sc_english">English</label>
+                    <input type="number" id="sc_english" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sc_philosophy">Philosophy</label>
+                    <input type="number" id="sc_philosophy" min="0" max="20" step="0.01">
+                </div>
+                <div>
+                    <label for="sc_option">Option</label>
+                    <input type="number" id="sc_option" min="0" max="20" step="0.01">
+                </div>
+                <div>
+                    <label for="sc_informatics">Informatics</label>
+                    <input type="number" id="sc_informatics" min="0" max="20" step="0.01">
+                </div>
+            </div>
+            <div id="Technical Sciences" class="hidden">
+                <div><label for="tech_maths">Maths</label><input type="number" id="tech_maths" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_physics">Physics</label><input type="number" id="tech_physics" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_electricity">Electricity</label><input type="number" id="tech_electricity" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_mechanics">Mechanics</label><input type="number" id="tech_mecanics" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_arabic">Arabic</label><input type="number" id="tech_arabic" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_french">French</label><input type="number" id="tech_french" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_english">English</label><input type="number" id="tech_english" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_philosophy">Philosophy</label><input type="number" id="tech_philosophy" min="0" max="20" step="0.01"></div>
+                <div><label for="tech_informatics">Informatics</label><input type="number" id="tech_informatics" min="0" max="20" step="0.01"></div>
+            </div>
+            <div id="Computer Sciences" class="hidden">
+                <div><label for="info_maths">Maths</label><input type="number" id="info_maths" min="0" max="20" step="0.01"></div>
+                <div><label for="info_algo">Algorithmics</label><input type="number" id="info_algo" min="0" max="20" step="0.01"></div>
+                <div><label for="info_prog">Programming</label><input type="number" id="info_prog" min="0" max="20" step="0.01"></div>
+                <div><label for="info_arabic">Arabic</label><input type="number" id="info_arabic" min="0" max="20" step="0.01"></div>
+                <div><label for="info_french">French</label><input type="number" id="info_french" min="0" max="20" step="0.01"></div>
+                <div><label for="info_english">English</label><input type="number" id="info_english" min="0" max="20" step="0.01"></div>
+                <div><label for="info_philosophy">Philosophy</label><input type="number" id="info_philosophy" min="0" max="20" step="0.01"></div>
+                <div><label for="info_option">Option</label><input type="number" id="info_option" min="0" max="20" step="0.01"></div>
+            </div>
+            <div id="Economics and Management" class="hidden">
+                <div><label for="eco_eco">Economics</label><input type="number" id="eco_eco" min="0" max="20"></div>
+                <div><label for="eco_mgmt">Management</label><input type="number" id="eco_mgmt" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_maths">Maths</label><input type="number" id="eco_maths" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_arabic">Arabic</label><input type="number" id="eco_arabic" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_his_geo">History / Geography</label><input type="number" id="eco_his_geo" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_french">French</label><input type="number" id="eco_french" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_english">English</label><input type="number" id="eco_english" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_philosophy">Philosophy</label><input type="number" id="eco_philosophy" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_informatics">Informatics</label><input type="number" id="eco_informatics" min="0" max="20" step="0.01"></div>
+                <div><label for="eco_option">Option</label><input type="number" id="eco_option" min="0" max="20" step="0.01"></div>
+            </div>
+            <div id="Literature" class="hidden">
+                <div><label for="lit_arabic">Arabic</label><input type="number" id="lit_arabic" min="0" max="20" step="0.01"></div>
+                <div><label for="lit_french">French</label><input type="number" id="lit_french" min="0" max="20" step="0.01"></div>
+                <div><label for="lit_english">English</label><input type="number" id="lit_english" min="0" max="20" step="0.01"></div>
+                <div><label for="lit_history">History</label><input type="number" id="lit_history" min="0" max="20" step="0.01"></div>
+                <div><label for="lit_geo">Geography</label><input type="number" id="lit_geo" min="0" max="20" step="0.01"></div>
+                <div><label for="lit_philosophy">Philosophy</label><input type="number" id="lit_philosophy" min="0" max="20" step="0.01"></div>
+                <div><label for="lit_option">Option</label><input type="number" id="lit_option" min="0" max="20" step="0.01"></div>
+            </div>
+            <div id="Sports" class="hidden">
+                <div>
+                    <label for="sp_individual">Sports Individuels</label>
+                    <input type="number" id="sp_individual" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_team">Sports Collectifs</label>
+                    <input type="number" id="sp_team" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_theory">Physiologie / Théorie du sport</label>
+                    <input type="number" id="sp_theory" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_performance">Performance Physique</label>
+                    <input type="number" id="sp_performance" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_arabic">Arabic</label>
+                    <input type="number" id="sp_arabic" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_french">French</label>
+                    <input type="number" id="sp_french" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_english">English</label>
+                    <input type="number" id="sp_english" min="0" max="20" step="0.01">
+                </div>
+
+                <div>
+                    <label for="sp_philosophy">Philosophy</label>
+                    <input type="number" id="sp_philosophy" min="0" max="20" step="0.01">
+                </div>
+            </div>
+        </div>
+        <button onclick="calculateAverage()">Calculate Average</button>
+    </body>
+</html>
